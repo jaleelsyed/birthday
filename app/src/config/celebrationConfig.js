@@ -101,6 +101,12 @@ export const celebrationConfig = {
     ['#F6D7C4', '#E2A98C'], // peach
   ],
 
+  // Petals — drifting in the air, and thrown when the candles go out.
+  petalColors: ['#F3D9DD', '#D99AA6', '#E9CF95', '#FBE7B5', '#EAD7F0', '#F6D7C4'],
+
+  // The small crackers that pop around the cake at the blow-out.
+  crackerColors: ['#E9CF95', '#FBE7B5', '#F3D9DD', '#FFFFFF'],
+
   // Firework burst colours for the finale.
   fireworkColors: ['#E9CF95', '#F3D9DD', '#FFFFFF', '#C9A35B', '#D99AA6', '#FBE7B5'],
 };

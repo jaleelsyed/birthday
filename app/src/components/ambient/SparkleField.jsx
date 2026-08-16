@@ -6,10 +6,17 @@ import { rand, times } from '../../lib/random';
  * `density` and `petals` scale with the stage so the air feels busier as
  * the celebration builds. Respects prefers-reduced-motion.
  */
-export default function SparkleField({ density = 0.7, petals = false, reduced = false }) {
+const FALLBACK_PETALS = ['#F3D9DD', '#D99AA6', '#E9CF95', '#FBE7B5'];
+
+export default function SparkleField({
+  density = 0.7,
+  petals = false,
+  colors,
+  reduced = false,
+}) {
   const canvasRef = useRef(null);
-  const stateRef = useRef({ density, petals, reduced });
-  stateRef.current = { density, petals, reduced };
+  const stateRef = useRef({ density, petals, reduced, colors });
+  stateRef.current = { density, petals, reduced, colors };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,7 +26,9 @@ export default function SparkleField({ density = 0.7, petals = false, reduced = 
     let h = 0;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const PETAL_COLORS = ['#F3D9DD', '#D99AA6', '#E9CF95', '#FBE7B5'];
+    const petalPalette = () => stateRef.current.colors?.length
+      ? stateRef.current.colors
+      : FALLBACK_PETALS;
 
     const makeMote = () => ({
       kind: 'mote',
@@ -43,7 +52,10 @@ export default function SparkleField({ density = 0.7, petals = false, reduced = 
       rot: rand(0, Math.PI * 2),
       vr: rand(-0.02, 0.02),
       a: rand(0.5, 0.9),
-      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      color: (() => {
+        const p = petalPalette();
+        return p[Math.floor(Math.random() * p.length)];
+      })(),
       sway: rand(0.4, 1.2),
       sp: rand(0, Math.PI * 2),
     });

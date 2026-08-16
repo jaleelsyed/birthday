@@ -52,6 +52,13 @@ export default function App() {
     setIntensity(STAGE_INTENSITY[stage] ?? 0.4);
   }, [stage, setIntensity]);
 
+  // The tab is part of the surprise too.
+  useEffect(() => {
+    document.title = config.name
+      ? `Happy Birthday, ${config.name}`
+      : 'A Celebration, Just For You';
+  }, [config.name]);
+
   const advanceLockRef = useRef(0);
 
   const advance = useCallback(() => {
@@ -92,6 +99,8 @@ export default function App() {
           <MakeAWish
             copy={s.wish}
             wishes={config.wishes}
+            petalColors={config.petalColors}
+            crackerColors={config.crackerColors}
             onAdvance={advance}
             play={play}
             reduced={reduced}
@@ -141,7 +150,16 @@ export default function App() {
         }}
       />
 
-      <SparkleField density={density} petals={petalsOn} reduced={reduced} />
+      <SparkleField
+        density={density}
+        petals={petalsOn}
+        colors={config.petalColors}
+        reduced={reduced}
+      />
+
+      {/* cinematic finish: grain over the whole frame, then a vignette */}
+      <div aria-hidden className="grain pointer-events-none absolute inset-0 overflow-hidden" />
+      <div aria-hidden className="vignette" />
 
       <MusicController muted={muted} onToggle={toggleMute} visible={started} />
 

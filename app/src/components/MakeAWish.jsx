@@ -4,26 +4,37 @@ import Cake, { CAKE_FRAME, CAKE_SHADOW, CAKE_FLOAT, CAKE_FLOAT_TRANSITION } from
 import WishReveal from './WishReveal';
 import StageButton from './ui/StageButton';
 import ContinueLink from './ui/ContinueLink';
+import PetalBurst from './ambient/PetalBurst';
+import Crackers from './ambient/Crackers';
 import { rand, times } from '../lib/random';
+
+/* Candle x positions as a share of the cake's 108-unit viewBox, so the
+ * smoke lines up with the wicks at any size. */
+const WICKS = [45 / 108, 54 / 108, 63 / 108];
 
 /**
  * Stage 5 — make a wish.
- * The candles flicker and go out, magical particles lift from the cake,
- * and the wishes rise one by one before the closing blessing.
+ *
+ * The blow-out is the emotional peak, so it gets the biggest reaction in
+ * the piece: the flames snuff to smoke, petals are thrown into the air,
+ * crackers pop around the cake, and the light lifts for a beat before the
+ * room settles again and the wishes rise.
  */
-export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
+export default function MakeAWish({ copy, wishes, petalColors, crackerColors, onAdvance, play, reduced }) {
   const [phase, setPhase] = useState('prompt'); // prompt → wishing → wishes → done
   const [candlesLit, setCandlesLit] = useState(true);
+  const [blownOut, setBlownOut] = useState(false);
 
   const handleWish = () => {
     play('candle');
     setPhase('wishing');
-    // candles flicker a moment, then go dark
+    // candles flicker a moment, then go dark — and everything erupts
     setTimeout(() => {
       setCandlesLit(false);
+      setBlownOut(true);
       play('sparkle');
     }, reduced ? 200 : 900);
-    setTimeout(() => setPhase('wishes'), reduced ? 500 : 2200);
+    setTimeout(() => setPhase('wishes'), reduced ? 500 : 3600);
   };
 
   const darker = phase !== 'prompt';
@@ -37,6 +48,32 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
         transition={{ duration: 1.4 }}
       />
 
+      {/* the room catches the light of the crackers for a moment */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(70% 55% at 50% 45%, rgba(255,226,160,0.4), transparent 70%)',
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: blownOut ? [0, 0.9, 0.25, 0] : 0 }}
+        transition={{ duration: 2.6, times: [0, 0.12, 0.5, 1], ease: 'easeOut' }}
+      />
+
+      {/* Crackers sit behind the cake so they rim its silhouette with light. */}
+      <AnimatePresence>
+        {blownOut && (
+          <motion.div key="crackers" className="absolute inset-0 z-0" exit={{ opacity: 0 }}>
+            <Crackers
+              colors={crackerColors}
+              reduced={reduced}
+              onPop={() => play('firework')}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="relative z-10 flex flex-col items-center">
         {/* The cake stays exactly where the previous stage left it — same
             frame, shadow and float — so the crossfade reads as one cake. */}
@@ -47,6 +84,36 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
           style={{ filter: CAKE_SHADOW }}
         >
           <Cake candlesLit={candlesLit} reduced={reduced} />
+
+          {/* smoke curling off each wick the instant the flames go out */}
+          {!candlesLit && !reduced && (
+            <div className="pointer-events-none absolute inset-0">
+              {WICKS.map((frac, i) =>
+                times(3, (j) => (
+                  <motion.span
+                    key={`${i}-${j}`}
+                    className="absolute block rounded-full"
+                    style={{
+                      left: `${frac * 100}%`,
+                      top: '23%',
+                      width: 5 + j * 2,
+                      height: 5 + j * 2,
+                      background: 'rgba(226,214,226,0.5)',
+                      filter: 'blur(3px)',
+                    }}
+                    initial={{ opacity: 0, y: 0, x: 0, scale: 0.5 }}
+                    animate={{
+                      opacity: [0, 0.55, 0],
+                      y: -(40 + j * 26),
+                      x: [0, j % 2 ? 7 : -7, j % 2 ? -5 : 5],
+                      scale: [0.5, 1.5, 2.4],
+                    }}
+                    transition={{ duration: 2.2 + j * 0.4, delay: j * 0.18, ease: 'easeOut' }}
+                  />
+                ))
+              )}
+            </div>
+          )}
 
           {/* particles rising from the cake once the wish is made */}
           <AnimatePresence>
@@ -105,6 +172,19 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Petals fly in front of everything — they're the thing being thrown. */}
+      <AnimatePresence>
+        {blownOut && (
+          <motion.div
+            key="petals"
+            className="pointer-events-none absolute inset-0 z-20"
+            exit={{ opacity: 0 }}
+          >
+            <PetalBurst colors={petalColors} reduced={reduced} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {(phase === 'wishes' || phase === 'done') && (
         <WishReveal
