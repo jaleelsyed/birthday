@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 /**
  * A small, elegant glass control in the corner to mute / unmute the score.
  * Animated equalizer bars show playback at a glance.
+ *
+ * Positioned off the safe-area insets so it clears the Dynamic Island, and
+ * kept at a 44px minimum so it's a comfortable thumb target.
  */
 export default function MusicController({ muted, onToggle, visible }) {
   if (!visible) return null;
@@ -17,8 +20,12 @@ export default function MusicController({ muted, onToggle, visible }) {
       whileTap={{ scale: 0.95 }}
       aria-pressed={!muted}
       aria-label={muted ? 'Unmute music' : 'Mute music'}
-      className="glass fixed right-4 top-4 z-50 flex items-center gap-2.5 rounded-full px-4 py-2.5
-                 text-champagne shadow-glow sm:right-6 sm:top-6"
+      style={{
+        top: 'calc(env(safe-area-inset-top) + 0.75rem)',
+        right: 'calc(env(safe-area-inset-right) + 0.9rem)',
+      }}
+      className="glass fixed z-50 flex min-h-[44px] items-center gap-2.5 rounded-full
+                 px-4 py-2.5 text-champagne shadow-glow"
     >
       <span className="flex h-4 items-end gap-[3px]" aria-hidden>
         {[0, 1, 2, 3].map((i) => (

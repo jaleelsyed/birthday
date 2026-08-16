@@ -185,8 +185,11 @@ export default function App() {
 
       <MusicController muted={muted} onToggle={toggleMute} visible={started} />
 
-      {/* progress dots */}
-      <div className="pointer-events-none absolute bottom-5 left-1/2 z-40 flex -translate-x-1/2 gap-2">
+      {/* progress dots — lifted clear of the home indicator */}
+      <div
+        className="pointer-events-none absolute left-1/2 z-40 flex -translate-x-1/2 gap-2"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 0.85rem)' }}
+      >
         {STAGES.map((s, i) => (
           <span
             key={s}

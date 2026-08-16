@@ -7,7 +7,10 @@ import ContinueLink from './ui/ContinueLink';
 import SceneCopy from './ui/SceneCopy';
 import { rand, pick, times } from '../lib/random';
 
-const BALLOON_COUNT = 30;
+/* Fewer balloons on a phone: the screen is a third the width, so 30 reads
+   as a crowd rather than a drift, and it's a lot of animated nodes for a
+   handset to composite at once. */
+const balloonCount = () => (window.innerWidth < 640 ? 20 : 30);
 
 /**
  * Stage 3 — release the balloons.
@@ -22,7 +25,7 @@ export default function BalloonRelease({ copy, colors, onAdvance, play, reduced 
   const handleRelease = () => {
     play('balloons');
     setBalloons(
-      times(BALLOON_COUNT, (i) => {
+      times(balloonCount(), (i) => {
         const edgeBias = i % 4 === 0 ? rand(-30, 30) : rand(-14, 14);
         return {
           id: i,
