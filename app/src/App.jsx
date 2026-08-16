@@ -12,7 +12,6 @@ import MusicController from './components/MusicController';
 import BirthdayIntro from './components/BirthdayIntro';
 import RoomLighting from './components/RoomLighting';
 import BalloonRelease from './components/BalloonRelease';
-import GiftReveal from './components/GiftReveal';
 import BirthdayCake from './components/BirthdayCake';
 import MakeAWish from './components/MakeAWish';
 import LetterReveal from './components/LetterReveal';
@@ -95,8 +94,6 @@ export default function App() {
             reduced={reduced}
           />
         );
-      case 'gift':
-        return <GiftReveal copy={s.gift} onAdvance={advance} play={play} reduced={reduced} />;
       case 'cake':
         return <BirthdayCake copy={s.cake} onAdvance={advance} play={play} reduced={reduced} />;
       case 'wish':

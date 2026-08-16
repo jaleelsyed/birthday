@@ -52,13 +52,6 @@ export const celebrationConfig = {
       revealEmoji: '🎉',
       continueLabel: 'Continue',
     },
-    gift: {
-      title: 'Something arrived for you',
-      titleEmoji: '🎁',
-      button: 'Untie the Ribbon',
-      revealTitle: 'Everything good, wrapped up for you',
-      continueLabel: 'Continue',
-    },
     cake: {
       title: 'And what’s a birthday without a cake?',
       titleEmoji: '🎂',
