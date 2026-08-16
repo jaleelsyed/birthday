@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx}'],
+  // Source lives in app/ — see the note in vite.config.js. These must track
+  // it, or Tailwind purges the classes it can't find and the site ships bare.
+  content: ['./app/index.html', './app/src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {

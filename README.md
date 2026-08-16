@@ -25,37 +25,44 @@ npm run build
 npm run preview
 ```
 
-## Publish it on GitHub Pages (free)
+## Publish it on GitHub Pages
 
-This is a static site once built, so GitHub can host it for free. A workflow
-is already included at `.github/workflows/deploy.yml` — it builds and
-publishes automatically.
+The built site is committed at the repo root, so GitHub Pages serves it with
+the default **"Deploy from a branch → main / (root)"** setting. Nothing to
+configure.
 
-1. Create a new repo on GitHub and push this folder to it:
+After changing anything, rebuild and push:
 
-   ```bash
-   git init
-   git add .
-   git commit -m "Birthday celebration site"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git push -u origin main
-   ```
+```bash
+npm run pages
+```
 
-2. On GitHub: **Settings → Pages → Build and deployment → Source →
-   "GitHub Actions"**. (You only do this once.)
+```bash
+git add -A && git commit -m "Update celebration" && git push
+```
 
-3. Every push to `main` now builds and deploys. Your site goes live at:
+Live at `https://<your-username>.github.io/<repo-name>/`.
 
-   ```
-   https://<your-username>.github.io/<repo-name>/
-   ```
+### Why the source lives in `app/`
 
-   The Actions tab shows progress and the final URL.
+Pages serves the repo root, so the root must hold the *built* `index.html`
+and `assets/`. Vite's source entry would otherwise sit at the root too, and
+Pages would serve that instead — it points at `/src/main.jsx`, raw JSX that
+no browser can run (a 404 for `main.jsx`, blank page). So:
 
-> Prefer not to use Actions? Run `npm run build` locally and drop the
-> contents of the `dist/` folder onto any static host (GitHub Pages via the
-> `gh-pages` branch, Netlify, Vercel, Cloudflare Pages — all work).
+```text
+app/        source — index.html + src/   (what you edit)
+assets/     built JS + CSS               (generated, committed)
+index.html  built entry                  (generated, committed)
+```
+
+`npm run pages` builds `app/` and copies the output to the root. Don't hand-
+edit the root `index.html` or `assets/` — they're overwritten on every build.
+
+If you'd rather keep build output out of git, switch Pages to
+**Settings → Pages → Source → "GitHub Actions"**; the included
+`.github/workflows/deploy.yml` builds and deploys on every push, and you can
+then delete the root `index.html`, `assets/`, `favicon.svg` and `audio/`.
 
 ## Make it yours
 
