@@ -5,6 +5,20 @@ import { times } from '../lib/random';
 // always sit *on* the cake rather than hanging over the edge.
 const CANDLES = [45, 54, 63];
 
+/**
+ * Shared framing for the cake. The cake stage and the wish stage must use
+ * identical values, otherwise the cake visibly jumps as the scenes cross-
+ * fade into each other.
+ */
+export const CAKE_FRAME = 'w-[min(70vw,22rem)]';
+export const CAKE_SHADOW = 'drop-shadow(0 26px 40px rgba(20,8,20,0.55))';
+export const CAKE_FLOAT = { y: [0, -8, 0] };
+export const CAKE_FLOAT_TRANSITION = {
+  duration: 6,
+  repeat: Infinity,
+  ease: 'easeInOut',
+};
+
 function Flame({ x, lit, reduced }) {
   return (
     <g>

@@ -24,7 +24,12 @@ export const celebrationConfig = {
     startMuted: false,
   },
 
-  // Copy for each ceremony. Keep it warm and personal.
+  /* Copy for each ceremony. Keep it warm and personal.
+   *
+   * `button`        — the gold call to action: the thing you DO on this screen.
+   * `continueLabel` — the quiet link shown after the moment has played out.
+   *                   Keep these neutral; if one names the next screen's
+   *                   action, that action appears to be asked for twice. */
   stages: {
     intro: {
       eyebrow: 'A celebration, just for {name}',
@@ -37,6 +42,7 @@ export const celebrationConfig = {
       buttonEmoji: '💡',
       duringTitle: 'Let’s light up the room…',
       revealTitle: 'Because today is your day.',
+      continueLabel: 'Continue',
     },
     balloons: {
       title: 'It’s time to celebrate!',
@@ -44,6 +50,7 @@ export const celebrationConfig = {
       button: 'Release the Balloons',
       revealTitle: 'Let the celebration begin!',
       revealEmoji: '🎉',
+      continueLabel: 'Continue',
     },
     cake: {
       title: 'And what’s a birthday without a cake?',
@@ -51,12 +58,14 @@ export const celebrationConfig = {
       button: 'Bring Out the Cake',
       revealTitle: 'Made especially for you',
       revealEmoji: '❤️',
+      continueLabel: 'Continue',
     },
     wish: {
       title: 'Make a wish…',
       titleEmoji: '✨',
       button: 'Make a Wish',
       closing: 'May every beautiful wish find its way to you. ❤️',
+      continueLabel: 'Continue',
     },
     sky: {
       prelude: 'One last thing…',

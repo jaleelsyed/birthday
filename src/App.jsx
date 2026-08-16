@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import celebrationConfig from './config/celebrationConfig';
@@ -16,12 +16,24 @@ import BirthdayCake from './components/BirthdayCake';
 import MakeAWish from './components/MakeAWish';
 import Fireworks from './components/Fireworks';
 
+/**
+ * Scenes crossfade rather than swapping one-at-a-time. Both are absolutely
+ * positioned, so the outgoing scene dissolves *under* the incoming one —
+ * which keeps the cake continuous from the cake stage into the wish.
+ * The incoming scene is later in the DOM, so it receives the clicks.
+ */
+/* Keep `exit` to animatable values only. A non-animatable key such as
+ * pointerEvents here prevents the exit from ever completing, which leaves
+ * the outgoing scene mounted on top of the new one forever. Double-taps
+ * during the crossfade are handled by the lock in `advance` instead. */
 const sceneTransition = {
-  initial: { opacity: 0, scale: 1.02 },
-  animate: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.99 },
-  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] } },
+  exit: { opacity: 0, transition: { duration: 0.7, ease: 'easeInOut' } },
 };
+
+/** Ignore repeat advances fired while scenes are still crossfading. */
+const ADVANCE_LOCK_MS = 900;
 
 export default function App() {
   // Resolve every {name} token once, up front.
@@ -40,7 +52,13 @@ export default function App() {
     setIntensity(STAGE_INTENSITY[stage] ?? 0.4);
   }, [stage, setIntensity]);
 
+  const advanceLockRef = useRef(0);
+
   const advance = useCallback(() => {
+    const now = Date.now();
+    if (now - advanceLockRef.current < ADVANCE_LOCK_MS) return;
+    advanceLockRef.current = now;
+
     play('click');
     if (stage === 'intro') start(); // first gesture unlocks audio
     setIndex((i) => Math.min(i + 1, STAGES.length - 1));
@@ -141,7 +159,7 @@ export default function App() {
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div key={stage} className="absolute inset-0" {...sceneTransition}>
           {sceneEl}
         </motion.div>

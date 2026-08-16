@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Cake from './Cake';
+import Cake, { CAKE_FRAME, CAKE_SHADOW, CAKE_FLOAT, CAKE_FLOAT_TRANSITION } from './Cake';
 import WishReveal from './WishReveal';
 import StageButton from './ui/StageButton';
+import ContinueLink from './ui/ContinueLink';
 import { rand, times } from '../lib/random';
 
 /**
@@ -37,8 +38,14 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
       />
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* the cake stays centered through the wish */}
-        <div className="relative w-[min(66vw,20rem)]" style={{ filter: 'drop-shadow(0 22px 34px rgba(20,8,20,0.6))' }}>
+        {/* The cake stays exactly where the previous stage left it — same
+            frame, shadow and float — so the crossfade reads as one cake. */}
+        <motion.div
+          className={`relative ${CAKE_FRAME}`}
+          animate={reduced ? undefined : CAKE_FLOAT}
+          transition={CAKE_FLOAT_TRANSITION}
+          style={{ filter: CAKE_SHADOW }}
+        >
           <Cake candlesLit={candlesLit} reduced={reduced} />
 
           {/* particles rising from the cake once the wish is made */}
@@ -63,7 +70,7 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
               </div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
         <AnimatePresence mode="wait">
           {phase === 'prompt' && (
@@ -116,9 +123,7 @@ export default function MakeAWish({ copy, wishes, onAdvance, play, reduced }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9 }}
           >
-            <StageButton emoji="✨" onClick={onAdvance}>
-              Light Up the Sky
-            </StageButton>
+            <ContinueLink onClick={onAdvance}>{copy.continueLabel}</ContinueLink>
           </motion.div>
         )}
       </AnimatePresence>

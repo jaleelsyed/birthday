@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CornerFlorals from './ambient/CornerFlorals';
-import StageButton from './ui/StageButton';
+import ContinueLink from './ui/ContinueLink';
 import { times } from '../lib/random';
 
 const CEILING = times(5, (i) => i);
@@ -151,10 +151,10 @@ export default function RoomLighting({ copy, onAdvance, play, reduced }) {
               <h2 className="headline gold-text" style={{ fontSize: 'var(--text-title)' }}>
                 {copy.revealTitle}
               </h2>
-              <div className="mt-10">
-                <StageButton emoji="🎈" onClick={onAdvance} delay={0.4}>
-                  Let’s Celebrate
-                </StageButton>
+              <div className="mt-9">
+                <ContinueLink onClick={onAdvance} delay={0.5}>
+                  {copy.continueLabel}
+                </ContinueLink>
               </div>
             </motion.div>
           )}

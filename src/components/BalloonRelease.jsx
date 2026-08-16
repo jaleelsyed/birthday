@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Balloon from './Balloon';
 import CornerFlorals from './ambient/CornerFlorals';
 import StageButton from './ui/StageButton';
+import ContinueLink from './ui/ContinueLink';
 import SceneCopy from './ui/SceneCopy';
 import { rand, pick, times } from '../lib/random';
 
@@ -75,10 +76,10 @@ export default function BalloonRelease({ copy, colors, onAdvance, play, reduced 
                 {copy.revealTitle}
                 <span className="ml-3" aria-hidden>{copy.revealEmoji}</span>
               </h2>
-              <div className="mt-10">
-                <StageButton emoji="🎂" onClick={onAdvance} delay={0.4}>
-                  Time for Cake
-                </StageButton>
+              <div className="mt-9">
+                <ContinueLink onClick={onAdvance} delay={0.5}>
+                  {copy.continueLabel}
+                </ContinueLink>
               </div>
             </motion.div>
           )}
