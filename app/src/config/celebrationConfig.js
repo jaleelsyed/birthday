@@ -52,6 +52,13 @@ export const celebrationConfig = {
       revealEmoji: '🎉',
       continueLabel: 'Continue',
     },
+    gift: {
+      title: 'Something arrived for you',
+      titleEmoji: '🎁',
+      button: 'Untie the Ribbon',
+      revealTitle: 'Everything good, wrapped up for you',
+      continueLabel: 'Continue',
+    },
     cake: {
       title: 'And what’s a birthday without a cake?',
       titleEmoji: '🎂',
@@ -65,6 +72,25 @@ export const celebrationConfig = {
       titleEmoji: '✨',
       button: 'Make a Wish',
       closing: 'May every beautiful wish find its way to you. ❤️',
+      continueLabel: 'Continue',
+    },
+    letter: {
+      title: 'And a few words, just for you',
+      button: 'Open the Letter',
+      // Each line lands on its own, at reading pace. Make these yours.
+      body: [
+        'I hope today feels as good as you make everything else feel.',
+        'Thank you for the laughing, the patience, the small kindnesses nobody else notices.',
+        'Whatever this year asks of you, I hope it gives back twice as much.',
+      ],
+      continueLabel: 'Continue',
+    },
+    constellation: {
+      title: 'Somewhere up there…',
+      lead: 'Every year a new star is lit. Tonight, one of them is yours.',
+      button: 'Find Your Star',
+      revealTitle: 'The {name} Constellation',
+      caption: 'Named tonight, and shining for you.',
       continueLabel: 'Continue',
     },
     sky: {

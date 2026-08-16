@@ -12,8 +12,11 @@ import MusicController from './components/MusicController';
 import BirthdayIntro from './components/BirthdayIntro';
 import RoomLighting from './components/RoomLighting';
 import BalloonRelease from './components/BalloonRelease';
+import GiftReveal from './components/GiftReveal';
 import BirthdayCake from './components/BirthdayCake';
 import MakeAWish from './components/MakeAWish';
+import LetterReveal from './components/LetterReveal';
+import Constellation from './components/Constellation';
 import Fireworks from './components/Fireworks';
 
 /**
@@ -92,6 +95,8 @@ export default function App() {
             reduced={reduced}
           />
         );
+      case 'gift':
+        return <GiftReveal copy={s.gift} onAdvance={advance} play={play} reduced={reduced} />;
       case 'cake':
         return <BirthdayCake copy={s.cake} onAdvance={advance} play={play} reduced={reduced} />;
       case 'wish':
@@ -101,6 +106,26 @@ export default function App() {
             wishes={config.wishes}
             petalColors={config.petalColors}
             crackerColors={config.crackerColors}
+            onAdvance={advance}
+            play={play}
+            reduced={reduced}
+          />
+        );
+      case 'letter':
+        return (
+          <LetterReveal
+            copy={s.letter}
+            signature={config.signature}
+            onAdvance={advance}
+            play={play}
+            reduced={reduced}
+          />
+        );
+      case 'constellation':
+        return (
+          <Constellation
+            copy={s.constellation}
+            name={config.name}
             onAdvance={advance}
             play={play}
             reduced={reduced}
